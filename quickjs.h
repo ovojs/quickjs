@@ -512,31 +512,31 @@ JS_EXTERN int JS_IsRegisteredClass(JSRuntime *rt, JSClassID class_id);
 
 /* value handling */
 
-static js_force_inline JSValue JS_NewBool(JSContext *ctx, JS_BOOL val)
+JSValue JS_NewBool(JSContext *ctx, JS_BOOL val)
 {
     (void)&ctx;
     return JS_MKVAL(JS_TAG_BOOL, (val != 0));
 }
 
-static js_force_inline JSValue JS_NewInt32(JSContext *ctx, int32_t val)
+JSValue JS_NewInt32(JSContext *ctx, int32_t val)
 {
     (void)&ctx;
     return JS_MKVAL(JS_TAG_INT, val);
 }
 
-static js_force_inline JSValue JS_NewFloat64(JSContext *ctx, double val)
+JSValue JS_NewFloat64(JSContext *ctx, double val)
 {
     (void)&ctx;
     return __JS_NewFloat64(val);
 }
 
-static js_force_inline JSValue JS_NewCatchOffset(JSContext *ctx, int32_t val)
+JSValue JS_NewCatchOffset(JSContext *ctx, int32_t val)
 {
     (void)&ctx;
     return JS_MKVAL(JS_TAG_CATCH_OFFSET, val);
 }
 
-static js_force_inline JSValue JS_NewInt64(JSContext *ctx, int64_t val)
+JSValue JS_NewInt64(JSContext *ctx, int64_t val)
 {
     JSValue v;
     if (val >= INT32_MIN && val <= INT32_MAX) {
@@ -547,7 +547,7 @@ static js_force_inline JSValue JS_NewInt64(JSContext *ctx, int64_t val)
     return v;
 }
 
-static js_force_inline JSValue JS_NewUint32(JSContext *ctx, uint32_t val)
+JSValue JS_NewUint32(JSContext *ctx, uint32_t val)
 {
     JSValue v;
     if (val <= INT32_MAX) {
@@ -562,54 +562,54 @@ JS_EXTERN JSValue JS_NewNumber(JSContext *ctx, double d);
 JS_EXTERN JSValue JS_NewBigInt64(JSContext *ctx, int64_t v);
 JS_EXTERN JSValue JS_NewBigUint64(JSContext *ctx, uint64_t v);
 
-static inline JS_BOOL JS_IsNumber(JSValue v)
+JS_BOOL JS_IsNumber(JSValue v)
 {
     int tag = JS_VALUE_GET_TAG(v);
     return tag == JS_TAG_INT || JS_TAG_IS_FLOAT64(tag);
 }
 
-static inline JS_BOOL JS_IsBigInt(JSContext *ctx, JSValue v)
+JS_BOOL JS_IsBigInt(JSContext *ctx, JSValue v)
 {
     (void)&ctx;
     return JS_VALUE_GET_TAG(v) == JS_TAG_BIG_INT;
 }
 
-static inline JS_BOOL JS_IsBool(JSValue v)
+JS_BOOL JS_IsBool(JSValue v)
 {
     return JS_VALUE_GET_TAG(v) == JS_TAG_BOOL;
 }
 
-static inline JS_BOOL JS_IsNull(JSValue v)
+JS_BOOL JS_IsNull(JSValue v)
 {
     return JS_VALUE_GET_TAG(v) == JS_TAG_NULL;
 }
 
-static inline JS_BOOL JS_IsUndefined(JSValue v)
+JS_BOOL JS_IsUndefined(JSValue v)
 {
     return JS_VALUE_GET_TAG(v) == JS_TAG_UNDEFINED;
 }
 
-static inline JS_BOOL JS_IsException(JSValue v)
+JS_BOOL JS_IsException(JSValue v)
 {
     return JS_VALUE_GET_TAG(v) == JS_TAG_EXCEPTION;
 }
 
-static inline JS_BOOL JS_IsUninitialized(JSValue v)
+JS_BOOL JS_IsUninitialized(JSValue v)
 {
     return JS_VALUE_GET_TAG(v) == JS_TAG_UNINITIALIZED;
 }
 
-static inline JS_BOOL JS_IsString(JSValue v)
+JS_BOOL JS_IsString(JSValue v)
 {
     return JS_VALUE_GET_TAG(v) == JS_TAG_STRING;
 }
 
-static inline JS_BOOL JS_IsSymbol(JSValue v)
+JS_BOOL JS_IsSymbol(JSValue v)
 {
     return JS_VALUE_GET_TAG(v) == JS_TAG_SYMBOL;
 }
 
-static inline JS_BOOL JS_IsObject(JSValue v)
+JS_BOOL JS_IsObject(JSValue v)
 {
     return JS_VALUE_GET_TAG(v) == JS_TAG_OBJECT;
 }
@@ -633,7 +633,7 @@ JS_EXTERN JSValue JS_DupValue(JSContext *ctx, JSValue v);
 JS_EXTERN JSValue JS_DupValueRT(JSRuntime *rt, JSValue v);
 JS_EXTERN int JS_ToBool(JSContext *ctx, JSValue val); /* return -1 for JS_EXCEPTION */
 JS_EXTERN int JS_ToInt32(JSContext *ctx, int32_t *pres, JSValue val);
-static inline int JS_ToUint32(JSContext *ctx, uint32_t *pres, JSValue val)
+int JS_ToUint32(JSContext *ctx, uint32_t *pres, JSValue val)
 {
     return JS_ToInt32(ctx, (int32_t*)pres, val);
 }
@@ -647,18 +647,18 @@ JS_EXTERN int JS_ToBigUint64(JSContext *ctx, uint64_t *pres, JSValue val);
 JS_EXTERN int JS_ToInt64Ext(JSContext *ctx, int64_t *pres, JSValue val);
 
 JS_EXTERN JSValue JS_NewStringLen(JSContext *ctx, const char *str1, size_t len1);
-static inline JSValue JS_NewString(JSContext *ctx, const char *str) {
+JSValue JS_NewString(JSContext *ctx, const char *str) {
     return JS_NewStringLen(ctx, str, strlen(str));
 }
 JS_EXTERN JSValue JS_NewAtomString(JSContext *ctx, const char *str);
 JS_EXTERN JSValue JS_ToString(JSContext *ctx, JSValue val);
 JS_EXTERN JSValue JS_ToPropertyKey(JSContext *ctx, JSValue val);
 JS_EXTERN const char *JS_ToCStringLen2(JSContext *ctx, size_t *plen, JSValue val1, JS_BOOL cesu8);
-static inline const char *JS_ToCStringLen(JSContext *ctx, size_t *plen, JSValue val1)
+const char *JS_ToCStringLen(JSContext *ctx, size_t *plen, JSValue val1)
 {
     return JS_ToCStringLen2(ctx, plen, val1, 0);
 }
-static inline const char *JS_ToCString(JSContext *ctx, JSValue val1)
+const char *JS_ToCString(JSContext *ctx, JSValue val1)
 {
     return JS_ToCStringLen2(ctx, NULL, val1, 0);
 }
@@ -923,13 +923,13 @@ JS_EXTERN JSValue JS_NewCFunctionData(JSContext *ctx, JSCFunctionData *func,
                                       int length, int magic, int data_len,
                                       JSValue *data);
 
-static inline JSValue JS_NewCFunction(JSContext *ctx, JSCFunction *func, const char *name,
+JSValue JS_NewCFunction(JSContext *ctx, JSCFunction *func, const char *name,
                                       int length)
 {
     return JS_NewCFunction2(ctx, func, name, length, JS_CFUNC_generic, 0);
 }
 
-static inline JSValue JS_NewCFunctionMagic(JSContext *ctx, JSCFunctionMagic *func,
+JSValue JS_NewCFunctionMagic(JSContext *ctx, JSCFunctionMagic *func,
                                            const char *name,
                                            int length, JSCFunctionEnum cproto, int magic)
 {
